@@ -20,8 +20,7 @@ jobs:
         working_directory: ~/repo
         steps:
         - checkout
-        - node/install-packages:
-            appr-dir: ./client
+        - node/install-packages
         - run: 
             command: npm install
             working_directory: ./client
