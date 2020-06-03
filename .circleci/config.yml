@@ -31,5 +31,5 @@ workflows:
     build-test-and-deploy:
         jobs:
         - build-and-test
-        - build-and-run2
+        - build-and-test2
 
