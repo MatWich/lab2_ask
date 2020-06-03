@@ -11,7 +11,8 @@ jobs:
         - run: 
             command: npm install
             working_directory: ./server
-            command: npm test
+        - npm test
+    
     build-and-test2:
         executor: node/default
         working_directory: ~/repo
@@ -21,7 +22,7 @@ jobs:
         - run: 
             command: npm install
             working_directory: ./client
-            command: npm test
+        - npm test
 workflows:
     build-test-and-deploy:
         jobs:
