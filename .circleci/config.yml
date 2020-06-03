@@ -9,8 +9,10 @@ jobs:
         - checkout
         - node/install-packages
         - run: npm install
+        - working_directory: ./server
         - run: npm test
 workflows:
     build-test-and-deploy:
         jobs:
         - build-and-test
+
