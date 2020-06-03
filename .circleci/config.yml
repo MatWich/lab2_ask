@@ -11,6 +11,7 @@ jobs:
         - run: 
             command: npm install
             working_directory: ./server
+        - run:
             command: npm test
             working_directory: ./server
     
@@ -23,6 +24,7 @@ jobs:
         - run: 
             command: npm install
             working_directory: ./client
+        - run:
             command: npm test
             working_directory: ./client
 workflows:
