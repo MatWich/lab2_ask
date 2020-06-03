@@ -1,23 +1,67 @@
-version: '3'
-services:
-  api-server:
-    container_name: node-svr
-    image: node-svr:1.0
-    build:
-      context: ./server
-    env_file:
-    - ./server/.env
-  react-client:
-    container_name: cra-client
-    image: react-client:1.0
-    build:
-      context: ./client
-    ports:
-    - "8080:80"
-  node-db:
-    container_name: node-react-db
-    image: node-react-db:1.0
-    build:
-      context: ./db
-    environment:
-      MYSQL_ROOT_PASSWORD: Zaq12wsx
+version: 2.1
+orbs:
+  node: circleci/node@2.1.0
+jobs:
+  docker-setup:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - setup_remote_docker
+ 
+  server-test:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          app-dir: ./server
+      - run:
+          command: npm test
+          working_directory: ./server
+
+  client-test:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          app-dir: ./client
+      - run:
+          command: npm test
+          working_directory: ./client
+
+  docker-publish:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          command: |
+            echo "$DOCKER_LOGIN" | docker login -u "wojow8" --password-stdin
+            sudo docker build ./server -t wojow8/srv
+            sudo docker push wojow8/srv
+      - run:
+          command: |
+            echo "$DOCKER_LOGIN" | docker login -u "wojow8" --password-stdin
+            sudo docker build ./client -t wojow8/cli
+            sudo docker push wojow8/cli
+   
+workflows:
+    build-and-test:
+      jobs:
+        - docker-setup
+        - server-test:
+          filters:
+            branches:
+             only:
+               - master
+        - client-test:
+          filters:
+            branches:
+             only:
+               - master
+        - docker-publish:
+            requires:
+              - docker-setup
+              - server-test
+              - client-test       
