@@ -37,12 +37,12 @@ jobs:
       - checkout
       - run:
           command: |
-            echo "$DOCKER_LOGIN" | docker login -u "wojow8" --password-stdin
+            echo "$PASS_DOCKER" | docker login -u "wojow8" --password-stdin
             sudo docker build ./server -t wojow8/srv
             sudo docker push wojow8/srv
       - run:
           command: |
-            echo "$DOCKER_LOGIN" | docker login -u "wojow8" --password-stdin
+            echo "$PASS_DOCKER" | docker login -u "wojow8" --password-stdin
             sudo docker build ./client -t wojow8/cli
             sudo docker push wojow8/cli
    
